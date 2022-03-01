@@ -1,54 +1,77 @@
 require 'spec_helper'
 
 describe 'samba::server::service' do
+
+  let(:pre_condition) { 'include samba::server' }
+
   context 'on a Debian os family' do
-    let(:facts) {{ :osfamily => 'Debian' }}
-
-    it { should contain_service('samba').with_require('Class[Samba::Server::Config]') }
-
     context 'Debian' do
       context 'wheezy' do
-        let(:facts) {{ :osfamily => 'Debian',
-                       :operatingsystem => 'Debian',
-                       :operatingsystemmajrelease => '7' }}
+        let(:facts) do
+          {
+            os: {
+              'family' => 'Debian',
+              'name' => 'Debian',
+              'release' => {
+                'minor' => '1',
+                'major' => '7',
+              }
+            }
+          }
+        end
+
         it { should contain_service('samba') }
       end
+
       context 'jessie' do
-        let(:facts) {{ :osfamily => 'Debian',
-                       :operatingsystem => 'Debian',
-                       :operatingsystemmajrelease => '8' }}
+        let(:facts) do
+          {
+            os: {
+              'family' => 'Debian',
+              'name' => 'Debian',
+              'release' => {
+                'minor' => '1',
+                'major' => '8',
+              }
+            }
+          }
+        end
+
         it { should contain_service('smbd') }
       end
     end
 
     context 'Ubuntu' do
-      let(:facts) {{ :osfamily => 'Debian', :operatingsystem => 'Ubuntu' }}
+      let(:facts) do
+        {
+          os: {
+            'family' => 'Debian',
+            'name' => 'Ubuntu',
+          }
+        }
+      end
+
       it { should contain_service('smbd') }
     end
   end
 
   context 'on a Redhat os family' do
-    let(:facts) {{ :osfamily => 'Redhat' }}
+    let(:facts) {{ os: { 'family' => 'RedHat' }}}
     it { should contain_service('smb') }
   end
 
   context 'on a Archlinux os family' do
-    let(:facts) {{ :osfamily => 'Archlinux' }}
+    let(:facts) {{ os: { 'family' => 'Archlinux' }}}
     it { should contain_service('smbd') }
   end
 
-  context 'on Linux os family' do
-    let(:facts) {{ :osfamily => 'Linux' }}
-    it { should raise_error(/is not supported by this module./) }
-
-    context 'Gentoo' do
-      let(:facts) {{ :osfamily => 'Linux', :operatingsystem => 'Gentoo' }}
-      it { should contain_service('samba') }
-    end
+  context 'Gentoo' do
+    let(:facts) {{ os: { 'family' => 'Gentoo' }}}
+    it { should contain_service('samba') }
   end
 
   context 'on an unsupported OS' do
-    let(:facts) {{ :osfamily => 'Solaris' }}
+    let(:facts) {{ os: { 'family' => 'Solaris' }}}
     it { should raise_error(/Solaris is not supported by this module./) }
   end
 end
