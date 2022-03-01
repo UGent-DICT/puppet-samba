@@ -1,10 +1,10 @@
-require "delegate"
+require 'delegate'
 
 module Augeas
   class Change
     attr_reader :target, :name, :delimiter
 
-    def initialize(target, name, value = nil, delimiter = "\"")
+    def initialize(target, name, value = nil, delimiter = '"')
       @target = target
       @name = name
       @value = value
@@ -22,13 +22,13 @@ module Augeas
     def ==(other)
       other.is_a?(self.class) && [other.target, other.name] == [target, name]
     end
-    alias_method :eql?, :==
+    alias eql? ==
 
     private
 
     def action
-      return "set" unless @value.nil?
-      "rm "
+      return 'set' unless @value.nil?
+      'rm '
     end
 
     def value

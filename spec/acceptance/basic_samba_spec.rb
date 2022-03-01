@@ -1,8 +1,9 @@
 require 'spec_helper_acceptance'
 
 describe 'basic samba' do
- context 'default parameters' do
-    let(:pp) {"
+  context 'default parameters' do
+    let(:pp) do
+      "
       class { 'samba::server':
         workgroup     => 'example',
         server_string => 'Example Samba Server',
@@ -28,14 +29,15 @@ describe 'basic samba' do
         hosts_allow               => '127.0.0.1',
         acl_allow_execute_always  => true,
       }
-    "}
-
-    it 'should apply with no errors' do
-      apply_manifest(pp, :catch_failures=>true)
+    "
     end
 
-    it 'should be idempotent' do
-      apply_manifest(pp, :catch_changes=>true)
+    it 'applies with no errors' do
+      apply_manifest(pp, catch_failures: true)
+    end
+
+    it 'is idempotent' do
+      apply_manifest(pp, catch_changes: true)
     end
   end
 end

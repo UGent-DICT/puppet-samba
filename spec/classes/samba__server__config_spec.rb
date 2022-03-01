@@ -1,7 +1,6 @@
 require 'spec_helper'
 
-describe 'samba::server::config', :type => :class do
-
+describe 'samba::server::config', type: :class do
   test_on = {
     supported_os: [
       {
@@ -15,9 +14,9 @@ describe 'samba::server::config', :type => :class do
 
   on_supported_os(test_on).each do |os, osfacts|
     context "on #{os}" do
-      let( :facts ) { osfacts }
+      let(:facts) { osfacts }
 
-      it { should contain_file('/etc/samba/smb.conf').with_owner('root') }
+      it { is_expected.to contain_file('/etc/samba/smb.conf').with_owner('root') }
     end
   end
 end

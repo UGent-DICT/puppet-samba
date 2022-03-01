@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe 'samba::server::service' do
-
   let(:pre_condition) { 'include samba::server' }
 
   context 'on a Debian os family' do
@@ -20,7 +19,7 @@ describe 'samba::server::service' do
           }
         end
 
-        it { should contain_service('samba') }
+        it { is_expected.to contain_service('samba') }
       end
 
       context 'jessie' do
@@ -37,7 +36,7 @@ describe 'samba::server::service' do
           }
         end
 
-        it { should contain_service('smbd') }
+        it { is_expected.to contain_service('smbd') }
       end
     end
 
@@ -51,27 +50,31 @@ describe 'samba::server::service' do
         }
       end
 
-      it { should contain_service('smbd') }
+      it { is_expected.to contain_service('smbd') }
     end
   end
 
   context 'on a Redhat os family' do
-    let(:facts) {{ os: { 'family' => 'RedHat' }}}
-    it { should contain_service('smb') }
+    let(:facts) { { os: { 'family' => 'RedHat' } } }
+
+    it { is_expected.to contain_service('smb') }
   end
 
   context 'on a Archlinux os family' do
-    let(:facts) {{ os: { 'family' => 'Archlinux' }}}
-    it { should contain_service('smbd') }
+    let(:facts) { { os: { 'family' => 'Archlinux' } } }
+
+    it { is_expected.to contain_service('smbd') }
   end
 
   context 'Gentoo' do
-    let(:facts) {{ os: { 'family' => 'Gentoo' }}}
-    it { should contain_service('samba') }
+    let(:facts) { { os: { 'family' => 'Gentoo' } } }
+
+    it { is_expected.to contain_service('samba') }
   end
 
   context 'on an unsupported OS' do
-    let(:facts) {{ os: { 'family' => 'Solaris' }}}
-    it { should raise_error(/Solaris is not supported by this module./) }
+    let(:facts) { { os: { 'family' => 'Solaris' } } }
+
+    it { is_expected.to raise_error(%r{Solaris is not supported by this module.}) }
   end
 end
