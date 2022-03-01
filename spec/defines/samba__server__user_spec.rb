@@ -14,7 +14,6 @@ describe 'samba::server::user', :type => :define do
       it { is_expected.to contain_exec('add smb account for test_user').with(
         :command => '/bin/echo -e \'secret\nsecret\n\' | /usr/bin/pdbedit --password-from-stdin -a \'test_user\'',
         :unless  => '/usr/bin/pdbedit \'test_user\'',
-        :require => 'User[test_user]',
         :notify  => 'Class[Samba::Server::Service]'
       ) }
     end
