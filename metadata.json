@@ -14,8 +14,8 @@
     {
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
-        "6.0",
-        "7.0"
+        "6",
+        "7"
       ]
     },
     {
@@ -28,8 +28,10 @@
     {
       "operatingsystem": "Debian",
       "operatingsystemrelease": [
-        "7.0",
-        "8.0"
+        "7",
+        "8",
+        "9",
+        "10"
       ]
     }
   ],
