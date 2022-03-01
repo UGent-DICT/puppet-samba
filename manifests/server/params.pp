@@ -10,8 +10,12 @@ class samba::server::params {
       case $facts['os']['name'] {
         'Debian': {
           case $facts['os']['release']['major'] {
-            '8' : { $service_name = 'smbd' }
-            default: { $service_name = 'samba' }
+            '7' : {
+              $service_name = 'samba'
+            }
+            default: {
+              $service_name = 'smbd'
+            }
           }
           $nmbd_name = undef
         }
@@ -20,7 +24,7 @@ class samba::server::params {
           $nmbd_name = 'nmbd'
         }
         default: {
-          $service_name = 'samba'
+          $service_name = 'smbd'
           $nmbd_name = undef
         }
       }
@@ -33,6 +37,8 @@ class samba::server::params {
       $service_name = 'smbd'
       $nmbd_name = 'nmbd'
     }
-    default: { fail("${facts['os']['family']} is not supported by this module.") }
+    default: {
+      fail("${facts['os']['family']} is not supported by this module.")
+    }
   }
 }
