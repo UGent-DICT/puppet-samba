@@ -7,7 +7,9 @@
   "source": "https://github.com/ajjahn/puppet-samba",
   "project_page": "https://github.com/ajjahn/puppet-samba",
   "issues_url": "https://github.com/ajjahn/puppet-samba/issues",
-  "description": "Module for provisioning Samba",
+  "dependencies": [
+
+  ],
   "operatingsystem_support": [
     {
       "operatingsystem": "RedHat",
@@ -31,7 +33,14 @@
       ]
     }
   ],
-  "dependencies": [
-
-  ]
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 6.21.0 < 8.0.0"
+    }
+  ],
+  "description": "Module for provisioning Samba",
+  "pdk-version": "2.1.1",
+  "template-url": "https://github.com/puppetlabs/pdk-templates#2.1.1",
+  "template-ref": "tags/2.1.1-0-g03daa92"
 }
