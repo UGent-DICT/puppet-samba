@@ -1,0 +1,8 @@
+<%- | String           $user,
+      Optional[String] $password,
+      Optional[String] $ou,
+      Array[String]    $options = [],
+| -%>
+/usr/bin/net ads join -U '<%= $user %><% if $password { %>%<%= $password %><% } %>' \
+  <% if $ou { %>'createcomputer=<%= $ou %>'<% } %> \
+  <% $options.each |String $option| { %> '<%= $option %>'<% } %>

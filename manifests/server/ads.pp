@@ -22,6 +22,7 @@ class samba::server::ads($ensure = present,
   $map_archive                = 'no',
   $map_readonly               = 'no',
   $target_ou                  = 'Nix_Mashine',
+  $join_options               = [],
   $perform_join               = true) {
 
   require 'samba::server'
@@ -105,38 +106,21 @@ class samba::server::ads($ensure = present,
     changes => $changes
   }
 
-  file {'verify_active_directory':
-    # this script returns 0 if join is intact
-    path    => '/sbin/verify_active_directory',
-    owner   => root,
-    group   => root,
-    mode    => '0755',
-    content => template("${module_name}/verify_active_directory.erb"),
-    require => [ Package[$krb5_user_package, $winbind_package, 'expect'],
-      Augeas['samba-realm', 'samba-security', 'samba-winbind enum users',
-        'samba-winbind enum groups', 'samba-winbind uid', 'samba-winbind gid',
-        'samba-winbind use default domain'] ],
-  }
-
-  file {'configure_active_directory':
-    # this script joins or leaves a domain
-    path    => '/sbin/configure_active_directory',
-    owner   => root,
-    group   => root,
-    mode    => '0755',
-    content => template("${module_name}/configure_active_directory.erb"),
-    require => [ Package[$krb5_user_package, $winbind_package, 'expect'],
-      Augeas['samba-realm', 'samba-security', 'samba-winbind enum users',
-        'samba-winbind enum groups', 'samba-winbind uid', 'samba-winbind gid',
-        'samba-winbind use default domain'] ],
-  }
-
   if ($perform_join) {
-    exec {'join-active-directory':
-      # join the domain configured in samba.conf
-      command => '/sbin/configure_active_directory -j',
-      unless  => '/sbin/verify_active_directory',
-      require => [ File['configure_active_directory', 'verify_active_directory'] ],
+    exec{ 'net ads join':
+      command  => epp("${module_name}/ads_join.sh.epp",{
+        user     => $winbind_acct,
+        password => $winbind_pass,
+        ou       => $target_ou,
+        options  => $join_options,
+      }),
+      unless   => '/usr/bin/net ads testjoin',
+      provider => 'shell',
+      before   => Class['Samba::Server::Winbind'],
+      require  => [ Package[$krb5_user_package, $winbind_package, 'expect'],
+        Augeas['samba-realm', 'samba-security', 'samba-winbind enum users',
+          'samba-winbind enum groups', 'samba-winbind uid', 'samba-winbind gid',
+          'samba-winbind use default domain'] ],
     }
   }
 }
