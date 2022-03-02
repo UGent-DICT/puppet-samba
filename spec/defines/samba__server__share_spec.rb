@@ -43,6 +43,8 @@ shared_examples 'default share' do
     set.with('delete readonly')
     set.with('printer name')
     set.with('msdfs root')
+    set.with('dfree cache time')
+    set.with('dfree command')
     set.with('guest account')
     set.with('hosts allow')
     set.with('acl allow execute always')
@@ -809,6 +811,28 @@ describe 'samba::server::share', type: :define do
           }
         end
         let(:change_set) { default_changes.with('msdfs root', 'no') }
+      end
+
+      context 'with dfree_cache_time set to 60' do
+        include_examples 'default share'
+        let(:params) do
+          {
+            ensure: 'present',
+         dfree_cache_time: 60,
+          }
+        end
+        let(:change_set) { default_changes.with('dfree cache time', "'60'") }
+      end
+
+      context 'with dfree_command set to "echo 10240 10240"' do
+        include_examples 'default share'
+        let(:params) do
+          {
+            ensure: 'present',
+         dfree_command: "echo 10240 10240",
+          }
+        end
+        let(:change_set) { default_changes.with('dfree command', "'echo 10240 10240'") }
       end
 
       context 'with guest_account set to "killing trees"' do

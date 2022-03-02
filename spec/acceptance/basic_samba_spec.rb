@@ -26,6 +26,8 @@ describe 'basic samba' do
         force_user                => 'user',
         hide_dot_files            => false,
         msdfs_root                => true,
+        dfree_command             => 'echo 10240 10240',
+        dfree_cache_time          => 60,
         hosts_allow               => '127.0.0.1',
         acl_allow_execute_always  => true,
       }
